@@ -9,7 +9,21 @@ namespace DoudizhuServer
     {
         #region 网络部分
         public Socket clientSocket { get; set; }
-        public string ip { get => clientSocket.RemoteEndPoint.ToString(); }
+        public string ip
+        {
+            get
+            {
+                try
+                {
+                    return clientSocket.RemoteEndPoint.ToString();
+                }
+                catch (ObjectDisposedException) // socket销毁之后仍有可能调用ClientPeer的方法
+                {
+                    return "(连接已断开)";
+                }
+                
+            }
+        }
 
         public delegate void ReceiveCompletedDele(ClientPeer client, NetMsg msg);
         public event ReceiveCompletedDele ReceiveCompleted;
@@ -20,14 +34,14 @@ namespace DoudizhuServer
         public const int bufferSize = 2048;
         #endregion
         #region 用户信息
-        public int userid { get; set; }
+        public int userId { get; set; }
         public string username { get; set; }
         #endregion
 
 
         public ClientPeer()
         {
-            userid = -1;
+            userId = -1;
             receiveBuffer = new byte[bufferSize];
             msg = new NetMsg();
         }

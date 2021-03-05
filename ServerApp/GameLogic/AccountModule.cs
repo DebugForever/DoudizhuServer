@@ -118,7 +118,7 @@ namespace ServerApp.GameLogic
         {
             SingleExec.Exec(() =>
             {
-                UserInfoDto dto = DatabaseManager.CreateUserInfoDto(client.userid);
+                UserInfoDto dto = DatabaseManager.CreateUserInfoDto(client.userId);
                 client.SendNetMsg(OpCode.account, AccountCode.getUserInfoSRes, dto);
             });
         }

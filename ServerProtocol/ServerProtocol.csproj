@@ -18,10 +18,11 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\..\UnityProjects\ZhaJinHuaClient\Assets\Scripts\</OutputPath>
+    <OutputPath>..\..\..\..\UnityProjects\DoudizhuClient\Assets\Scripts\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>3</WarningLevel>
+    <DocumentationFile>..\..\..\..\UnityProjects\DoudizhuClient\Assets\Scripts\ServerProtocol.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -45,8 +46,10 @@
   <ItemGroup>
     <Compile Include="Code\AccountCode.cs" />
     <Compile Include="Code\AccountReturnCode.cs" />
+    <Compile Include="Code\MatchCode.cs" />
     <Compile Include="Code\OpCode.cs" />
     <Compile Include="Dto\AccountDto.cs" />
+    <Compile Include="Dto\MatchRoomDto.cs" />
     <Compile Include="Dto\RankItemDto.cs" />
     <Compile Include="Dto\RankListDto.cs" />
     <Compile Include="Dto\UserInfoDto.cs" />

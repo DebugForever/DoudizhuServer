@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-/// <summary>
-/// DTO: DataTranferObject
-/// DTO是用于传输网络数据的对象
-/// </summary>
+// DTO: DataTranferObject
+// DTO是用于传输网络数据的对象
 namespace ServerProtocol.Dto
 {
     [Serializable]

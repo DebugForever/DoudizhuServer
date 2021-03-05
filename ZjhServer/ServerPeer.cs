@@ -110,7 +110,6 @@ namespace DoudizhuServer
             {
                 //数据接收成功
                 byte[] tcpPacket = new byte[receiveLen];
-                Console.WriteLine("received {0} bytes from {1}", receiveLen, client.ip);
                 Buffer.BlockCopy(client.receiveBuffer, 0, tcpPacket, 0, receiveLen);
                 client.HandleReceive(tcpPacket);
 
@@ -119,7 +118,7 @@ namespace DoudizhuServer
             }
             else
             {
-                Disconnect(client, "接收到零长度数据，自动断开连接");
+                Disconnect(client, "接收到零长度数据");
             }
         }
 

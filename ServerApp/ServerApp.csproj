@@ -47,6 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Session\MatchSession.cs" />
+    <Compile Include="Session\MatchRoom.cs" />
+    <Compile Include="Session\Sessions.cs" />
     <Compile Include="Database\DatabaseManager.cs" />
     <Compile Include="GameLogic\AccountModule.cs" />
     <Compile Include="GameLogic\ChatModule.cs" />

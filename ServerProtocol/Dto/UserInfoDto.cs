@@ -11,13 +11,13 @@ namespace ServerProtocol.Dto
         public int userId;
         public string username;
         public string iconName;
-        public string coin;
+        public int coin;
 
         public UserInfoDto()
         {
         }
 
-        public UserInfoDto(int userId, string username, string iconName, string coin)
+        public UserInfoDto(int userId, string username, string iconName, int coin)
         {
             this.userId = userId;
             this.username = username;

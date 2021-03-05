@@ -161,7 +161,7 @@ namespace ServerApp.Database
         {
             MySqlCommand cmd = connection.CreateCommand();
             cmd.CommandText = "update user_info set online=0 where id=@id";
-            cmd.Parameters.AddWithValue("id", client.userid);
+            cmd.Parameters.AddWithValue("id", client.userId);
             cmd.ExecuteNonQuery();
             LoginStateManager.Logout(client);//注意logout之后会将userID重置
         }
@@ -185,7 +185,7 @@ namespace ServerApp.Database
                 dto.userId = id;
                 dto.username = reader.GetString("username");
                 dto.iconName = reader.GetString("iconName");
-                dto.coin = reader.GetString("coin");
+                dto.coin = reader.GetInt32("coin");
                 reader.Close();
                 return dto;
             }
