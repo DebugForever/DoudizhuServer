@@ -49,6 +49,9 @@
   <ItemGroup>
     <Compile Include="Session\MatchSession.cs" />
     <Compile Include="Session\MatchRoom.cs" />
+    <Compile Include="Session\PlayRoom.cs" />
+    <Compile Include="Session\PlaySession.cs" />
+    <Compile Include="Session\RoomBase.cs" />
     <Compile Include="Session\Sessions.cs" />
     <Compile Include="Database\DatabaseManager.cs" />
     <Compile Include="GameLogic\AccountModule.cs" />

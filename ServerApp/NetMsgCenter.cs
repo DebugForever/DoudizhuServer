@@ -2,6 +2,7 @@
 using ServerProtocol;
 using ServerProtocol.Code;
 using DoudizhuServer;
+using System;
 
 namespace ServerApp
 {
@@ -19,10 +20,17 @@ namespace ServerApp
         public void Disconnect(ClientPeer client)
         {
             //需要从声明顺序的逆序来Disconnect，有点像析构？
-            playModule.Disconnect(client);
-            matchModule.Disconnect(client);
-            chatModule.Disconnect(client);
-            accountModule.Disconnect(client);
+            try
+            {
+                playModule.Disconnect(client);
+                matchModule.Disconnect(client);
+                chatModule.Disconnect(client);
+                accountModule.Disconnect(client);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
 
         public void Init()

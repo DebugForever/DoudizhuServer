@@ -1,11 +1,8 @@
 ﻿using DoudizhuServer;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Collections.Concurrent;
-
+using ServerProtocol.Code;
 
 namespace ServerApp.Session
 {
@@ -26,7 +23,7 @@ namespace ServerApp.Session
         /// <summary>空房间队列，用于重用对象</summary>
         private ConcurrentQueue<MatchRoom> emptyRoomQueue = new ConcurrentQueue<MatchRoom>();
 
-        public event Action<int, List<ClientPeer>> MatchRoomFull;
+        public event Action<int, List<ClientPeer>> MatchRoomAllReady;
 
         /// <summary>
         /// 加入一个未满的房间并返回该房间
@@ -42,6 +39,7 @@ namespace ServerApp.Session
                 if (!emptyRoomQueue.TryDequeue(out room))
                 {
                     room = new MatchRoom();
+                    room.AllReady += MatchRoomAllReady;
                     if (!roomModelDict.TryAdd(room.roomId, room))
                         throw new ApplicationException("无法创建房间：房间ID冲突");
                 }
@@ -54,8 +52,6 @@ namespace ServerApp.Session
 
                 if (!room.IsFull())
                     availableRoomQueue.Enqueue(room);
-                else
-                    Console.WriteLine(string.Format("房间{0}已满。(todo:此处应触发一个事件)", room.roomId));
             }
             return room;
         }
@@ -109,7 +105,7 @@ namespace ServerApp.Session
 
         public void DestroyRoom(MatchRoom room)
         {
-            foreach (ClientPeer client in room.GetClients())
+            foreach (ClientPeer client in room.GetClientList())
             {
                 if (!clientRoomDict.TryRemove(client.userId, out var _))
                     throw new ApplicationException("无法销毁房间：用户丢失");

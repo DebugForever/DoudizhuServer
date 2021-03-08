@@ -21,7 +21,7 @@ namespace DoudizhuServer
                 {
                     return "(连接已断开)";
                 }
-                
+
             }
         }
 
@@ -81,7 +81,17 @@ namespace DoudizhuServer
         {
             msg.Reset(opCode, subOpCode, message);
             byte[] data = EncodingTools.Encode(msg.Serialize());
-            clientSocket.Send(data);//send不需要异步方式
+
+            try
+            {
+                clientSocket.Send(data);//send不需要异步方式
+            }
+            catch (Exception)
+            {
+                Console.WriteLine($"消息发送失败(client ip={this.ip},OpCode={opCode},SubOpCode={subOpCode})");
+                throw;
+            }
+
         }
 
         /// <summary>

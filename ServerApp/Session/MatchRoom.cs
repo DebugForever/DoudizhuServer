@@ -1,6 +1,7 @@
 ﻿using DoudizhuServer;
 using ServerApp.Database;
 using ServerProtocol;
+using ServerProtocol.Code;
 using ServerProtocol.Dto;
 using System;
 using System.Collections.Generic;
@@ -12,19 +13,8 @@ namespace ServerApp.Session
     /// <summary>
     /// 匹配房间管理
     /// </summary>
-    public class MatchRoom
+    public class MatchRoom : RoomBase
     {
-        private const int capacity = 3;
-        /// <summary>房间id，创建时线程安全</summary>
-        public int roomId { get; private set; }
-        /// <summary>下一个房间的id</summary>
-        private static int nextId = 0;
-
-        public MatchRoom()
-        {
-            roomId = Interlocked.Increment(ref nextId);
-        }
-
         /// <summary>
         /// userId到房间用户信息的映射
         /// </summary>
@@ -34,6 +24,8 @@ namespace ServerApp.Session
         /// 用户顺序列表，以id存储，表示进入房间的顺序
         /// </summary>
         private List<int> userOrderList = new List<int>();
+
+        public event Action<int, List<ClientPeer>> AllReady;
 
         /// <summary>
         /// 用户进入房间
@@ -45,7 +37,7 @@ namespace ServerApp.Session
             {
                 userDict.Add(client.userId, new RoomUserInfo(client, false));
                 userOrderList.Add(client.userId);
-                Console.WriteLine(string.Format("用户ID{0}进入房间{1}，当前房间人数：{2}", client.userId, roomId, GetClients().Length));
+                Console.WriteLine(string.Format("用户ID{0}进入房间{1}，当前房间人数：{2}", client.userId, roomId, GetClientList().Count));
             }
         }
 
@@ -59,7 +51,7 @@ namespace ServerApp.Session
             {
                 userDict.Remove(client.userId);
                 userOrderList.Remove(client.userId);
-                Console.WriteLine(string.Format("用户ID{0}退出房间{1}，当前房间人数：{2}", client.userId, roomId, GetClients().Length));
+                Console.WriteLine(string.Format("用户ID{0}退出房间{1}，当前房间人数：{2}", client.userId, roomId, GetClientList().Count));
             }
         }
 
@@ -73,6 +65,11 @@ namespace ServerApp.Session
             {
                 userDict[client.userId].ready = true;
                 Console.WriteLine(string.Format("房间{0}:用户ID{1}准备", roomId, client.userId));
+                if (IsAllReady())
+                {
+                    Broadcast(OpCode.match, MatchCode.GameStartBrd, null);
+                    AllReady(roomId, GetClientList());
+                }
             }
         }
 
@@ -132,17 +129,17 @@ namespace ServerApp.Session
             userOrderList.Clear();
         }
 
-        public ClientPeer[] GetClients()
+        public List<ClientPeer> GetClientList()
         {
             List<ClientPeer> result = new List<ClientPeer>();
             foreach (var item in userDict.Values)
             {
                 result.Add(item.client);
             }
-            return result.ToArray();
+            return result;
         }
 
-        public void Broadcast(int opCode, int subOpCode, object message, ClientPeer ignoreClient = null)
+        public override void Broadcast(int opCode, int subOpCode, object message, ClientPeer ignoreClient = null)
         {
             foreach (var item in userDict)
             {
